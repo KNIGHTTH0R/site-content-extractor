@@ -2,7 +2,7 @@ __author__ = 'akhil'
 
 import re
 
-class FileProcessor:
+class FileReader:
 
     def setFileName(self, filename):
         self.filename = filename

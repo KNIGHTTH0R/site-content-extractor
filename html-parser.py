@@ -3,9 +3,8 @@ __author__ = 'akhil'
 import os
 import argparse
 from InputReader import InputReader
-from FileProcessor import FileProcessor
+from FileReader import FileReader
 from HTMLParser import HTMLParser
-from nltk.tokenize import word_tokenize
 import nltk.data
 
 # initialize argument parser
@@ -21,12 +20,11 @@ OUTPUT_PATH = args.output + '/'
 def writeToFile(filename, content):
     if not content:
         return
+    sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
     file = open(OUTPUT_PATH+filename, 'w', encoding='utf-8')
     for entry in content:
-        tokens = word_tokenize(entry)
-        for token in tokens:
-            file.write(token + "\n")
-
+        file.write("\n".join(sent_detector.tokenize(entry.strip())))
+        file.write('\n')
     file.close()
 
 
@@ -35,12 +33,11 @@ def main():
     inputReader = InputReader(BASE_PATH)
     while inputReader.hasNextFile():
         fileName = inputReader.getNextFile()
-        fileProcessor = FileProcessor(BASE_PATH, fileName)
+        fileProcessor = FileReader(BASE_PATH, fileName)
         fileContent = fileProcessor._getFileContent()
 
         htmlParser = HTMLParser(fileContent)
 
         tagContent = htmlParser.getContentFromTags(args.tags)
         writeToFile(fileName, tagContent)
-
 main()
