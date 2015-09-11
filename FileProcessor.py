@@ -34,7 +34,7 @@ class FileProcessor:
     def _getFileContent(self):
         if hasattr(self, '_filecontent'):
             return self._filecontent
-        fileptr = open(self.getFile(), 'r', encoding='utf-8')
+        fileptr = open(self.getFile(), 'r', encoding='utf-8', errors='ignore')
         self._filecontent = fileptr.read()
         fileptr.close()
         return self._filecontent
